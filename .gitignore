@@ -28,3 +28,5 @@ media
 .dump.rdb
 .idea/workspace.xml
 run.sh
+.env
+venv/
