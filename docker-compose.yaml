@@ -4,33 +4,67 @@ services:
   backend:
     build:
       context: .
-    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8080"
+    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     networks:
       - backend
     ports:
-      - "8080:8000"
+      - "8000:8000"
     env_file:
       - .env
+    restart: always
+    volumes:
+      - .:/app
+      - /tmp/app/mysqld:/run/mysqld
     depends_on:
       - db
+      - nosql_db
+
+
+#  db:
+#    image: postgres:14-alpine
+#    volumes:
+#      - postgres_data:/var/lib/postgresql/data/
+#    restart: always
+#    ports:
+#      - "5433:5432"
+#    networks:
+#      - backend
+#    environment:
+#        - POSTGRES_DB=demo_db
+#        - POSTGRES_USER=postgres
+#        - POSTGRES_PASSWORD=postgres
+
+
 
   db:
-    image: postgres:14-alpine
+    image: mysql:latest
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
-    restart: always
+      - /tmp/app/mysqld:/var/run/mysqld
+      - ./db:/var/lib/mysql
     ports:
-      - "5433:5432"
+      - "3309:3306"
+    networks:
+      -  backend
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'demo_sql'
+      MYSQL_PASSWORD: '123'
+      MYSQL_ROOT_PASSWORD: "123"
+
+  nosql_db:
+    image: mongo
+    volumes:
+      - nosql_data:/var/lib/mongo/data/
+    ports:
+      - "27107:27107"
     networks:
       - backend
-    environment:
-        - POSTGRES_DB=demo_db
-        - POSTGRES_USER=postgres
-        - POSTGRES_PASSWORD=postgres
+    restart: always
 
 
 volumes:
-  postgres_data:
+  mysql_data:
+  nosql_data:
 
 networks:
   backend:

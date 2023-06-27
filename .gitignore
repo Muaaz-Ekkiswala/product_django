@@ -30,3 +30,5 @@ media
 run.sh
 .env
 venv/
+my_env
+db/

@@ -3,13 +3,22 @@ import uuid
 
 from django.db import models
 from rest_framework import status, viewsets
-
+from rest_framework_mongoengine import viewsets as mongo_viewsets
 from base.custom_error_response import custom_error_response
 from base.custom_response import JsonResponse
 from demo import settings
 
 
 # Create your models here.
+
+def generate_obj_id():
+    """
+    return object id for mongodb object
+    """
+    from bson import ObjectId
+    oid = ObjectId()
+    oid_str = str(oid)
+    return oid_str
 
 class BaseModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
@@ -144,7 +153,7 @@ class BaseModel(models.Model):
 #             return self.get_error_response(status_code=status.HTTP_404_NOT_FOUND, errors=f"Data with {pk} not found")
 
 
-class CrudCommonMethods(viewsets.GenericViewSet):
+class CrudCommonMethods(mongo_viewsets.GenericViewSet):
 
     def __int__(self, serializer_class, queryset, permission_class=None):
         self.serializer_class = serializer_class
@@ -152,7 +161,7 @@ class CrudCommonMethods(viewsets.GenericViewSet):
         self.permission_class = permission_class
 
     def get_instance(self, pk):
-        return self.queryset.filter(pk=pk).first()
+        return self.queryset.filter(pk=pk if pk else self.kwargs.get('id')).first()
 
     def get_serialized_list_response(self, query_set):
         """

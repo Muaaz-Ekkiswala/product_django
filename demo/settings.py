@@ -14,7 +14,6 @@ import os
 from pathlib import Path
 
 import mongoengine
-import pymysql
 from django.conf import settings
 
 
@@ -56,6 +55,8 @@ PROJECT_APPS = [
     'rest_framework',
     'rest_framework_swagger',
     'django_filters',
+    'rest_framework_simplejwt',
+    'django_mongoengine',
     # 'rest_framework_mongoengine'
 ]
 
@@ -100,30 +101,30 @@ WSGI_APPLICATION = 'demo.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'demo_db',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'demo_sql',
+        'USER': 'root',
+        'PASSWORD': '123',
         'HOST': 'db',
-        'PORT': 5432,
+        'PORT': 3306,
     },
 }
 
-# MONGODB_DATABASES = {
-#     "default": {
-#         "name": 'demo_nosql',
-#         "host": 'nosql_db',
-#         "password": 'root',
-#         "username": 'root',
-#         "tz_aware": True,  # if you are using timezones in django (USE_TZ = True)
-#     },
-# }
-#
-# mongoengine.connect(
-#     db="demo_nosql",
-#     host="nosql_db"
-# )
-# APPEND_SLASH = False
+MONGODB_DATABASES = {
+    "default": {
+        "name": 'demo_nosql',
+        "host": 'nosql_db',
+        "password": 'root',
+        "username": 'root',
+        "tz_aware": True,  # if you are using timezones in django (USE_TZ = True)
+    },
+}
+
+mongoengine.connect(
+    db="demo_nosql",
+    host="nosql_db"
+)
+APPEND_SLASH = False
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
