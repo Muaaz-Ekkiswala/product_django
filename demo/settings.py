@@ -105,7 +105,7 @@ DATABASES = {
         'NAME': 'demo_sql',
         'USER': 'root',
         'PASSWORD': '123',
-        'HOST': 'db',
+        'HOST': 'localhost',
         'PORT': 3306,
     },
 }
@@ -113,7 +113,7 @@ DATABASES = {
 MONGODB_DATABASES = {
     "default": {
         "name": 'demo_nosql',
-        "host": 'nosql_db',
+        "host": 'localhost',
         "password": 'root',
         "username": 'root',
         "tz_aware": True,  # if you are using timezones in django (USE_TZ = True)
@@ -122,7 +122,7 @@ MONGODB_DATABASES = {
 
 mongoengine.connect(
     db="demo_nosql",
-    host="nosql_db"
+    host="localhost"
 )
 APPEND_SLASH = False
 
